@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS student(
         gender = 'male' OR
         gender = 'MALE' OR
         gender = 'female' OR
-        gender = 'female'
+        gender = 'FEMALE'
         )
 );
