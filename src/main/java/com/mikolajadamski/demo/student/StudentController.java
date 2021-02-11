@@ -1,9 +1,12 @@
 package com.mikolajadamski.demo.student;
 
+import com.mikolajadamski.demo.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("students")
@@ -18,11 +21,12 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getAllStudents() {
+        //throw new ApiRequestException("Ops cannot get all students");
         return studentService.getAllStudents();
     }
 
     @PostMapping
-    public void addNewStudent(@RequestBody Student student) {
+    public void addNewStudent(@RequestBody @Valid Student student) {
         studentService.addNewStudent(student);
     }
 
