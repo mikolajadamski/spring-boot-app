@@ -1,9 +1,4 @@
-server:
-  servlet:
-    context-path: /api
-  error:
-    include-message: always
-    include-binding-errors: always
+
 
 app:
   datasource:

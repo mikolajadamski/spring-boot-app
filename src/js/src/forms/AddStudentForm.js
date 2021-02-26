@@ -1,7 +1,7 @@
 import React from 'react';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import { Input, Button, Tag } from 'antd';
-import { addNewStudent} from '../client';
+import { addNewStudent } from '../client';
 
 
 const inputBottomMargin = {marginBottom: "5px"};

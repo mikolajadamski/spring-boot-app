@@ -138,7 +138,7 @@ class App extends Component {
     return (
       <Container>
     <Empty description={
-      <h1>No Students Found</h1>
+      <span>No Students Found</span>
     }/>
     {commonElements()}
     </Container>
