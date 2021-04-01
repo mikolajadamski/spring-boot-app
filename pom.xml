@@ -18,7 +18,7 @@
 		<java.version>11</java.version>
 		<frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
 		<node.version>v14.13.0</node.version>
-		<yarn.version>v1.12.1</yarn.version>
+		<npm.version>v6.14.8</npm.version>
 	</properties>
 
 	<dependencies>
@@ -77,61 +77,69 @@
 			<version>1.6</version>
 		</dependency>
 
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.16</version>
+				<scope>provided</scope>
+			</dependency>
+
 	</dependencies>
+
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 	<profiles>
 		<profile>
-			<id>spring-boot-app</id>
+			<id>build-frontend</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
 				<plugins>
-
 					<plugin>
 						<!-- https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin -->
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.11.2</version>
 						<configuration>
 							<workingDirectory>src/js</workingDirectory>
 						</configuration>
 						<executions>
 							<execution>
-								<id>install node</id>
+								<id>install node and npm</id>
 								<goals>
-									<goal>install-node-and-yarn</goal>
+									<goal>install-node-and-npm</goal>
 								</goals>
 								<configuration>
 									<nodeVersion>${node.version}</nodeVersion>
-									<yarnVersion>${yarn.version}</yarnVersion>
+									<npmVersion>${npm.version}</npmVersion>
 								</configuration>
 							</execution>
 							<execution>
-								<id>yarn install</id>
+								<id>npm install</id>
 								<goals>
-									<goal>yarn</goal>
+									<goal>npm</goal>
 								</goals>
-								<phase>generate-resources</phase>
-							</execution>
-							<execution>
-								<id>yarn test</id>
-								<goals>
-									<goal>yarn</goal>
-								</goals>
-								<phase>test</phase>
 								<configuration>
-									<arguments>test</arguments>
-									<environmentVariables>
-										<CI>true</CI>
-									</environmentVariables>
+									<arguments>install</arguments>
 								</configuration>
 							</execution>
 							<execution>
-								<id>yarn build</id>
+								<id>npm run build</id>
 								<goals>
-									<goal>yarn</goal>
+									<goal>npm</goal>
 								</goals>
-								<phase>compile</phase>
 								<configuration>
-									<arguments>build</arguments>
+									<arguments>run build</arguments>
 								</configuration>
 							</execution>
 						</executions>
@@ -160,14 +168,5 @@
 			</build>
 		</profile>
 	</profiles>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

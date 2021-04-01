@@ -43,7 +43,7 @@ public class StudentDataAccessService {
             String email = resultSet.getString("email");
 
             String genderStr = resultSet.getString("gender").toUpperCase();
-            Student.Gender gender = Student.Gender.valueOf(genderStr);
+            Gender gender = Gender.valueOf(genderStr);
             return new Student(
                     studentId,
                     firstName,
