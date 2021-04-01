@@ -5,17 +5,14 @@ const checkStatus = response => {
         return response;
     }
     else {
-        let error = new Error(response.statusText);
-        Error.response = response;
-        response.json().then(e => {
-            error.error = e;
-        });
+        const error = new Error(response.statusText);
+        error.response = response;
         return Promise.reject(error);
     }
 }
 
 export const getAllStudents = () => 
-fetch('/api/students').then(checkStatus);
+fetch('api/students').then(checkStatus);
 export const addNewStudent = student => 
     fetch('api/students', {
         headers: {

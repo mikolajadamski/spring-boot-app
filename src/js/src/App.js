@@ -1,149 +1,148 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import Container from './Container';
-import Footer from './Footer';
 import './App.css';
 import {getAllStudents} from './client';
 import AddStudentForm from './forms/AddStudentForm';
 import { errorNotification } from './Notifications';
-import {
-  Table,
-  Avatar,
-  Spin,
-  Modal,
-  Empty
-} from 'antd';
+
 import { LoadingOutlined} from '@ant-design/icons';
-const getIndicatorIcon = () => <LoadingOutlined style={{ fontSize: 24 }} spin />;
+import { 
+  Layout, 
+  Menu, 
+  Breadcrumb,
+  Table,
+  Spin, 
+  Empty} from 'antd';
+import {
+  DesktopOutlined,
+  PieChartOutlined,
+  FileOutlined,
+  TeamOutlined,
+  UserOutlined
+} from '@ant-design/icons';
 
-class App extends Component {
+const { Header, Content, Footer, Sider} = Layout;
+const { SubMenu } = Menu;
 
-  state = {
-    students: [],
-    isFetching: false,
-    isAddStudentModalVisible: false
+const columns = [
+  {
+    title: 'Id',
+    dataIndex: 'studentId',
+    key: 'id'
+  },
+  {
+  title: 'First Name',
+  dataIndex: 'firstName',
+  key: 'firstname'
+},
+{
+  title: 'Last Name',
+  dataIndex: 'lastName',
+  key: 'lastname'
+},
+{
+  title: 'Email',
+  dataIndex: 'email',
+  key: 'email'
+},
+{
+  title: 'Gender',
+  dataIndex: 'gender',
+  key: 'gender'
+},
+];
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
+
+function App(){
+
+  const [students, setStudents] = useState([]);
+  const [fetching, setFetching] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  
+
+  const renderStudents = () => {
+    if (fetching) {
+      return <Spin indicator={antIcon} />
+    }
+    if(students.length <=0){
+      return <Empty />;
+    }
+    return <Table 
+    dataSource={students} 
+    columns={columns}
+    Header={"Students"}
+    pagination={{ pageSize: 50 }}
+    scroll={{ y: 260 }} 
+    rowKey={(student) => student.id}
+    />
   }
 
-  componentDidMount() {
-    this.fetchStudents();
-  }
-
-  openAddStudentModal = () => this.setState({isAddStudentModalVisible: true})
-
-  closeAddStudentModal = () => this.setState({isAddStudentModalVisible: false})
-
-  fetchStudents = () => {
-    this.setState({
-      isFetching: true
-    });
+  const fetchStudents = () => {
+    setFetching(true)
     getAllStudents()
     .then(res => res.json()
     .then(students => {
+      setStudents(students);
       console.log(students);
-      this.setState({
-        students: students,
-        isFetching: false
-      });
+      setFetching(false);
     }))
     .catch(error => {
       const message = error.error.message;
       const description = error.error.error;
       errorNotification(message, description);
-      this.setState({
-        isFetching: false
-      })
+      setFetching(false)
     })
   }
 
-  render()
-  {
-    const {students, isFetching, isAddStudentModalVisible} = this.state;
+  useEffect(() => {
+    fetchStudents()
+  }, []);
 
-    const commonElements = () => (
-      <div>
-         <Modal title='Add new student'
-          visible={isAddStudentModalVisible}
-          onOk={this.closeAddStudentModal}
-          onCancel={this.closeAddStudentModal}
-          width={1000}>
-            <AddStudentForm
-              onSuccess={() => {
-                this.closeAddStudentModal()
-              this.fetchStudents()
-              }} />
-          </Modal>
-          <Footer numberOfStudents={students.length}
-          handleAddStudentClickEvent={this.openAddStudentModal}></Footer>
-      </div>
-    )
-
-    if(isFetching){
-      return(
-        <Container>
-          <Spin indicator={getIndicatorIcon} />
-        </Container>
-      );
-    }
-    if(students && students.length){
-
-      const columns = [
-        {
-          title: '',
-          key: 'avatar',
-          render: (text, student) => (
-            <Avatar size='large'>
-                {`${student.firstName.charAt(0).toUpperCase()}${student.lastName.charAt(0).toUpperCase()}`}
-            </Avatar>
-          )
-        },
-        {
-          title: 'Student ID',
-          dataIndex: 'studentId',
-          key: 'studentId'
-        },
-        {
-          title: 'First Name',
-          dataIndex: 'firstName',
-          key: 'firstName'
-        },
-        {
-          title: 'Last Name',
-          dataIndex: 'lastName',
-          key: 'lastName'
-        },
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email'
-        },
-        {
-          title: 'Gender',
-          dataIndex: 'gender',
-          key: 'gender'
-        }
-      ];
-
-      return (
-        <Container>
-          <Table
-            style={{paddingBottom:'100px'}}
-            dataSource={students} 
-            columns={columns}
-            pagination={false} 
-            rowKey='studentId' />
-            {commonElements()}
-        </Container>
-      );
-    }
-
-    return (
-      <Container>
-    <Empty description={
-      <span>No Students Found</span>
-    }/>
-    {commonElements()}
-    </Container>
-    )
+  if (students.length <= 0) {
+    return "no data";
   }
+
+  return <Layout style={{ minHeight: '100vh' }}>
+  <Sider collapsible collapsed={collapsed}
+         onCollapse={setCollapsed}>
+      <div className="logo" />
+      <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <Menu.Item key="1" icon={<PieChartOutlined />}>
+              Option 1
+          </Menu.Item>
+          <Menu.Item key="2" icon={<DesktopOutlined />}>
+              Option 2
+          </Menu.Item>
+          <SubMenu key="sub1" icon={<UserOutlined />} title="User">
+              <Menu.Item key="3">Tom</Menu.Item>
+              <Menu.Item key="4">Bill</Menu.Item>
+              <Menu.Item key="5">Alex</Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
+              <Menu.Item key="6">Team 1</Menu.Item>
+              <Menu.Item key="8">Team 2</Menu.Item>
+          </SubMenu>
+          <Menu.Item key="9" icon={<FileOutlined />}>
+              Files
+          </Menu.Item>
+      </Menu>
+  </Sider>
+  <Layout className="site-layout">
+      <Header className="site-layout-background" style={{ padding: 0 }} />
+      <Content style={{ margin: '0 16px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>User</Breadcrumb.Item>
+              <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          </Breadcrumb>
+          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              {renderStudents()}
+          </div>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>Footer</Footer>
+  </Layout>
+</Layout>
 }
 
 export default App;
