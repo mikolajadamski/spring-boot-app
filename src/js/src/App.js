@@ -100,9 +100,6 @@ function App(){
     fetchStudents()
   }, []);
 
-  if (students.length <= 0) {
-    return "no data";
-  }
 
   return <Layout style={{ minHeight: '100vh' }}>
   <Sider collapsible collapsed={collapsed}
