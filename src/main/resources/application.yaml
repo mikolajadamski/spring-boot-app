@@ -2,7 +2,7 @@
 
 app:
   datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/mikudemo
+    jdbc-url: jdbc:postgresql://localhost:5432/users_db
     username: postgres
-    password: password
+    password: Pa$$word47
     pool-size: 30
