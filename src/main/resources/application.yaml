@@ -1,9 +1,8 @@
-app:
+spring:
   datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/users_db
+    url: jdbc:postgresql://localhost:5432/users_db
     username: postgres
     password: Pa$$word47
-    pool-size: 30
 
   jpa:
     hibernate:
@@ -12,4 +11,4 @@ app:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        show-sql: true
