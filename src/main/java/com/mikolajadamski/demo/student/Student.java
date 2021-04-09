@@ -3,32 +3,49 @@ package com.mikolajadamski.demo.student;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-
+@Entity
+@Table
 public class Student {
 
-    private final UUID studentId;
+    @Id
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            generator = "student_sequence",
+            strategy = GenerationType.SEQUENCE)
+    private Long studentId;
 
     @NotBlank
-    private final String firstName;
+    private String firstName;
 
     @NotBlank
-    private final String lastName;
+    private String lastName;
 
     @NotBlank
-    private final String email;
+    private String email;
 
     @NotNull
-    private final Gender gender;
+    private String gender;
 
-    public Student(@JsonProperty("studentId") UUID studentId,
-                   @JsonProperty("firstName")String firstName,
-                   @JsonProperty("lastName")String lastName,
-                   @JsonProperty("email")String email,
-                   @JsonProperty("gender")Gender gender) {
+    public Student() {
+    }
+
+    public Student(String firstName, String lastName, String email, String gender) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+    }
+
+    public Student(Long studentId, String firstName, String lastName, String email, String gender) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,7 +53,7 @@ public class Student {
         this.gender = gender;
     }
 
-    public UUID getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
@@ -52,8 +69,28 @@ public class Student {
         return email;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @Override
@@ -66,5 +103,8 @@ public class Student {
                 ", gender=" + gender +
                 '}';
     }
+
+
+
 
 }

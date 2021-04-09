@@ -9,40 +9,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service  //Component is ok too, but less specific
+@Service
 public class StudentService {
 
-    private final StudentDataAccessService studentDataAccessService;
+    private final StudentRepository studentRepository;
     private final EmailValidator emailValidator;
 
     @Autowired
-    public StudentService(StudentDataAccessService studentDataAccessService, EmailValidator emailValidator) {
-        this.studentDataAccessService = studentDataAccessService;
+    public StudentService(StudentRepository studentRepository, EmailValidator emailValidator) {
+        this.studentRepository = studentRepository;
         this.emailValidator = emailValidator;
     }
 
     List<Student> getAllStudents() {
-        return studentDataAccessService.selectAllStudents();
-    }
-
-    void addNewStudent(UUID studentId, Student student) {
-        UUID newStudentId = Optional.ofNullable(studentId).orElse(UUID.randomUUID());
-
-        if(!emailValidator.test(student.getEmail())){
-            throw new ApiRequestException(student.getEmail() + " is not valid");
-        }
-
-        if(studentDataAccessService.isEmailTaken(student.getEmail())){
-            throw new ApiRequestException(student.getEmail() + " is taken");
-        }
-        studentDataAccessService.insertStudent(newStudentId, student);
+        return studentRepository.findAll();
     }
 
     void addNewStudent(Student student) {
-        addNewStudent(null, student);
+        studentRepository.save(student);
     }
 
-    public List<StudentCourse> getAllCoursesForStudent(UUID studentId) {
-        return studentDataAccessService.selectAllCoursesForStudent(studentId);
-    }
 }
