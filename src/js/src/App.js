@@ -1,24 +1,28 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import Container from './Container';
 import './App.css';
 import {getAllStudents} from './client';
 import AddStudentForm from './forms/AddStudentForm';
 import { errorNotification } from './Notifications';
+import { StudentDrawerForm } from './forms/StudentDrawerForm';
 
-import { LoadingOutlined} from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined} from '@ant-design/icons';
 import { 
   Layout, 
   Menu, 
   Breadcrumb,
   Table,
   Spin, 
-  Empty} from 'antd';
+  Empty,
+  Button,
+  Badge,
+  Tag} from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
   FileOutlined,
   TeamOutlined,
-  UserOutlined
+  UserOutlined,
 } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider} = Layout;
@@ -59,7 +63,7 @@ function App(){
   const [students, setStudents] = useState([]);
   const [fetching, setFetching] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-
+  const [showDrawer, setShowDrawer] = useState(false);
   
 
   const renderStudents = () => {
@@ -69,14 +73,32 @@ function App(){
     if(students.length <=0){
       return <Empty />;
     }
-    return <Table 
+    return <>
+    <StudentDrawerForm
+      showDrawer={showDrawer}
+      setShowDrawer={setShowDrawer}
+      fetchStudents={fetchStudents}
+      />
+    <Table 
     dataSource={students} 
     columns={columns}
-    Header={"Students"}
+    title={() => 
+      <>
+      <Tag>Number of students</Tag>
+      <Badge count={students.length} className="site-badge-count-4"/>
+      <br/><br/> 
+      <Button
+      onClick={() => setShowDrawer(!showDrawer)} 
+      type="primary" shape="round" icon={<PlusOutlined />} size="small">
+      Add New Student
+      </Button>
+      </>
+      }
     pagination={{ pageSize: 50 }}
     scroll={{ y: 260 }} 
     rowKey={(student) => student.id}
     />
+    </>
   }
 
   const fetchStudents = () => {
