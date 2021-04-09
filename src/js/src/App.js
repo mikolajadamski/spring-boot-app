@@ -1,11 +1,9 @@
 import React, {useState, useEffect } from 'react';
 import Container from './Container';
 import './App.css';
-import {getAllStudents} from './client';
-import AddStudentForm from './forms/AddStudentForm';
-import { errorNotification } from './Notifications';
+import {getAllStudents, deleteStudent} from './client';
+import { errorNotification, successNotification } from './Notifications';
 import { StudentDrawerForm } from './forms/StudentDrawerForm';
-
 import { LoadingOutlined, PlusOutlined} from '@ant-design/icons';
 import { 
   Layout, 
@@ -16,7 +14,9 @@ import {
   Empty,
   Button,
   Badge,
-  Tag} from 'antd';
+  Tag,
+  Radio,
+  Popconfirm} from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -28,7 +28,21 @@ import {
 const { Header, Content, Footer, Sider} = Layout;
 const { SubMenu } = Menu;
 
-const columns = [
+const removeStudent = (studentId, callback) => {
+  deleteStudent(studentId).then(()=>{
+    successNotification("Student deleted", `Student ${studentId} has been deleted`);
+  })
+  .catch(error => {
+    error.response.json().then(res => {
+      errorNotification("An error occured", res.message)
+    })
+  })
+  .finally(() => {
+    callback();
+  })
+}
+
+const columns = fetchStudents => [
   {
     title: 'Id',
     dataIndex: 'studentId',
@@ -54,6 +68,21 @@ const columns = [
   dataIndex: 'gender',
   key: 'gender'
 },
+{
+  title: 'Actions',
+  dataIndex: 'actions',
+  render: (student) =>
+    <Radio.Group>
+      <Popconfirm
+        placement='topRight'
+        title={`Are you sure to delete ${student.firstName} ${student.lastName}`}
+        onConfirm={() => removeStudent(student.studentId, fetchStudents)}
+        okText='Yes'
+        cancelText='No'>
+          <Radio.Button value="small">Delete</Radio.Button>
+      </Popconfirm>
+    </Radio.Group>
+}
 ];
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
@@ -81,7 +110,7 @@ function App(){
       />
     <Table 
     dataSource={students} 
-    columns={columns}
+    columns={columns(fetchStudents)}
     title={() => 
       <>
       <Tag>Number of students</Tag>
@@ -111,11 +140,11 @@ function App(){
       setFetching(false);
     }))
     .catch(error => {
-      const message = error.error.message;
-      const description = error.error.error;
-      errorNotification(message, description);
-      setFetching(false)
+      error.response.json().then(res =>{
+        errorNotification("An error occured", res.message);
+      })
     })
+    .finally(() => setFetching(false))
   }
 
   useEffect(() => {

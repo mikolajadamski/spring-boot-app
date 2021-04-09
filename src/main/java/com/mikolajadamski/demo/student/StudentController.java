@@ -20,13 +20,19 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+        throw new IllegalStateException("err");
+//        return studentService.getAllStudents();
     }
 
 
     @PostMapping
     public void addNewStudent(@RequestBody @Valid Student student) {
         studentService.addNewStudent(student);
+    }
+
+    @DeleteMapping("{studentId}")
+    public void deleteStudent(@PathVariable Long studentId){
+        studentService.deleteStudent(studentId);
     }
 
 }
