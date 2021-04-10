@@ -145,7 +145,7 @@
 
 								<configuration>
 									<to>
-										<image>docker.io/mikolajadamski/${app.image.name}:$latest</image>
+										<image>docker.io/mikolajadamski/${app.image.name}:latest</image>
 									</to>
 								</configuration>
 								<goals>
@@ -201,7 +201,7 @@
 								<phase>package</phase>
 								<configuration>
 									<to>
-										<image>docker.io/mikolajadamski/${app.image.name}:$latest</image>
+										<image>docker.io/mikolajadamski/${app.image.name}:latest</image>
 									</to>
 								</configuration>
 								<goals>
