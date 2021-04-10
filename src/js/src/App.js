@@ -71,11 +71,11 @@ const columns = fetchStudents => [
 {
   title: 'Actions',
   dataIndex: 'actions',
-  render: (student) =>
+  render: (text, student) =>
     <Radio.Group>
       <Popconfirm
         placement='topRight'
-        title={'Are you sure to delete this student?'}
+        title={`Are you sure to delete ${student.firstName} ${student.lastName}`}
         onConfirm={() => removeStudent(student.studentId, fetchStudents)}
         okText='Yes'
         cancelText='No'>
@@ -100,7 +100,19 @@ function App(){
       return <Spin indicator={antIcon} />
     }
     if(students.length <=0){
-      return <Empty />;
+      return <>
+      <Button
+      onClick={() => setShowDrawer(!showDrawer)} 
+      type="primary" shape="round" icon={<PlusOutlined />} size="small">
+      Add New Student
+      </Button>
+      <StudentDrawerForm
+      showDrawer={showDrawer}
+      setShowDrawer={setShowDrawer}
+      fetchStudents={fetchStudents}
+      /> 
+      <Empty />
+      </>;
     }
     return <>
     <StudentDrawerForm
@@ -136,7 +148,6 @@ function App(){
     .then(res => res.json()
     .then(students => {
       setStudents(students);
-      console.log(students);
       setFetching(false);
     }))
     .catch(error => {
