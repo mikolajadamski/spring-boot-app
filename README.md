@@ -1,11 +1,14 @@
-# Simple app with spring boot + ReactJS made with Amigoscode course
+# Simple app with Spring Boot + ReactJS deployed on AWS made with Amigoscode course
 
-Application allows to add users to database. Database (PostgreSQL) is on Docker 
+Application allows to add users to database or delete from database. Used React UI library - Ant Design - to create interface.
 
-## Running app from single jar file + database on docker
+### Application view
+![image](https://user-images.githubusercontent.com/59196351/114272044-b6b0de00-9a14-11eb-8e91-160667dbc2a4.png)
 
-![image](https://user-images.githubusercontent.com/59196351/109880772-a2d8c600-7c77-11eb-8585-c6600e51da7c.png)
 
-## Website (data generated randomly)
+### User Drawer
+![image](https://user-images.githubusercontent.com/59196351/114272048-b9133800-9a14-11eb-85ac-14beb72c635c.png)
 
-![image](https://user-images.githubusercontent.com/59196351/109880903-c4d24880-7c77-11eb-90f2-19a5853409ff.png)
+
+### Empty Database 
+![image](https://user-images.githubusercontent.com/59196351/114272050-bc0e2880-9a14-11eb-9956-315fda423104.png)
