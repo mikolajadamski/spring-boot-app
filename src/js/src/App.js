@@ -75,7 +75,7 @@ const columns = fetchStudents => [
     <Radio.Group>
       <Popconfirm
         placement='topRight'
-        title={`Are you sure to delete ${student.firstName} ${student.lastName}`}
+        title={'Are you sure to delete this student?'}
         onConfirm={() => removeStudent(student.studentId, fetchStudents)}
         okText='Yes'
         cancelText='No'>

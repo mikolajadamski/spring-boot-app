@@ -17,13 +17,14 @@ export function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents}) {
         setSubmitting(true)
         addNewStudent(student)
         .then(() => {
-            console.log("student added");
             onClose();
             successNotification("Student added", `${student.name} was added` )
             fetchStudents();
         })
         .catch(error => {
-            console.log(error)
+            error.response.json().then(resp => {
+                errorNotification("An Error Occured", resp.message)
+            })
         })
         .finally(() => {
             setSubmitting(false)
