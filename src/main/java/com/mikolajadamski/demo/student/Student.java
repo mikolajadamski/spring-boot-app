@@ -27,25 +27,29 @@ public class Student {
     private String firstName;
 
     @NotBlank
+    @Column(nullable = false)
     private String lastName;
 
     @NotBlank
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
 
     public Student() {
     }
 
-    public Student(String firstName, String lastName, String email, String gender) {
+    public Student(String firstName, String lastName, String email, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
     }
 
-    public Student(Long studentId, String firstName, String lastName, String email, String gender) {
+    public Student(Long studentId, String firstName, String lastName, String email, Gender gender) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -69,7 +73,7 @@ public class Student {
         return email;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
@@ -89,7 +93,7 @@ public class Student {
         this.email = email;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

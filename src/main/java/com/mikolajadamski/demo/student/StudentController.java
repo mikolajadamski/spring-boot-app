@@ -20,8 +20,7 @@ public class StudentController {
 
     @GetMapping
     public List<Student> getAllStudents() {
-        throw new IllegalStateException("err");
-//        return studentService.getAllStudents();
+        return studentService.getAllStudents();
     }
 
 
