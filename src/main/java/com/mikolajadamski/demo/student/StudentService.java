@@ -1,7 +1,8 @@
 package com.mikolajadamski.demo.student;
 
+import com.mikolajadamski.demo.exception.BadRequestException;
+import com.mikolajadamski.demo.exception.StudentNotFoundException;
 import com.mikolajadamski.demo.utils.EmailValidator;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,21 +27,26 @@ public class StudentService {
     void addNewStudent(Student student) {
         if(emailValidator.test(student.getEmail()))
         {
-            Optional<Student> result = studentRepository.findByEmail(student.getEmail());
-            if(result.isEmpty()){
+
+            if(!studentRepository.existsByEmail(student.getEmail())){
                 studentRepository.save(student);
             }
             else {
-                throw new RuntimeException("Email already taken");
+                throw new BadRequestException("Email already taken");
             }
         }
         else {
-            throw new RuntimeException("Email is incorrect");
+            throw new BadRequestException("Email is incorrect");
         }
 
     }
 
     public void deleteStudent(Long id) {
-        studentRepository.deleteById(id);
+        if(studentRepository.existsById(id)){
+            studentRepository.deleteById(id);
+        }
+        else {
+            throw new StudentNotFoundException("Student " + id + " does not exist");
+        }
     }
 }
